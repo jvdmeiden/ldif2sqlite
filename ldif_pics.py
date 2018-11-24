@@ -1,3 +1,6 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
 # Copyright (c) 2018 Jan van der Meiden.                            
 # Copying and distribution of this file, with or without modification, 
 # are permitted in any medium without royalty provided the copyright   
