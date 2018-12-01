@@ -23,9 +23,7 @@ parser = LDIFParser(open(sys.argv[1], 'rb'))
 date = sys.argv[2]
 for dn, entry in parser.parse():
     a_displayName = None
-    a_capgeminiGrade = None
     a_uid = None
-    a_capgeminiGlobalID = None
     a_telephoneNumber = None
     a_info = None
     a_department = None
@@ -36,24 +34,14 @@ for dn, entry in parser.parse():
     a_country = None
     a_city = None
     a_mail = None
-    a_capgeminiDiscipline = None
-    a_capgeminiFunction = None
-    a_capgeminiStartDate = None
-    a_capgeminiEndDate = None
-    a_capgeminiGender = None
     a_mobile = None
     a_department = None
-    a_capgeminiEntity = None
     a_photo = None
     for k, v in entry.items():
         if k == 'displayName': 
             a_displayName = entry['displayName'][0]
-        if k == 'capgemini-Grade': 
-            a_capgeminiGrade = entry['capgemini-Grade'][0]
         if k == 'uid': 
             a_uid = entry['uid'][0]
-        if k == 'capgeminiGlobalID': 
-            a_capgeminiGlobalID = entry['capgeminiGlobalID'][0]
         if k == 'telephoneNumber': 
             a_telephoneNumber = entry['telephoneNumber'][0]
         if k == 'info': 
@@ -75,27 +63,15 @@ for dn, entry in parser.parse():
             a_city = entry['l'][0]
         if k == 'mail': 
             a_mail = entry['mail'][0]
-        if k == 'capgemini-Discipline': 
-            a_capgeminiDiscipline = entry['capgemini-Discipline'][0]
-        if k == 'capgemini-Function': 
-            a_capgeminiFunction = entry['capgemini-Function'][0]
-        if k == 'capgemini-StartDate': 
-            a_capgeminiStartDate = entry['capgemini-StartDate'][0]
-        if k == 'capgemini-EndDate': 
-            a_capgeminiEndDate = entry['capgemini-EndDate'][0]
         if k == 'mobile': 
             a_mobile = entry['mobile'][0]
-        if k == 'capgemini-Entity': 
-            a_capgeminiEntity = entry['capgemini-Entity'][0]
-        if k == 'capgemini-gender': 
-            a_capgeminiGender = entry['capgemini-gender'][0]
         if k == 'jpegPhoto' or k =='thumbnailPhoto': 
             a_photo = entry['userPrincipalName'][0]
 
     if a_photo != None:
         a_photo = a_country+"."+a_photo+"."+date+".jpg"
     if a_displayName != None:
-        c.execute('''INSERT INTO employees(ldifDate,displayName,capgeminiGrade,uid,capgeminiGlobalID,telephoneNumber,info,department,company,employeeType,name,manager,country,city,mail,capgeminiDiscipline,capgeminiFunction,capgeminiStartDate,capgeminiEndDate,capgeminiGender,mobile,capgeminiEntity,photo)  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', (date,a_displayName,a_capgeminiGrade,a_uid,a_capgeminiGlobalID,a_telephoneNumber,a_info,a_department,a_company,a_employeeType,a_name,a_manager,a_country,a_city,a_mail,a_capgeminiDiscipline,a_capgeminiFunction,a_capgeminiStartDate,a_capgeminiEndDate,a_capgeminiGender,a_mobile,a_capgeminiEntity,a_photo) )
+        c.execute('''INSERT INTO employees(ldifDate,displayName,uid,telephoneNumber,info,department,company,employeeType,name,manager,country,city,mail,mobile,photo)  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', (date,a_displayName,a_uid,a_telephoneNumber,a_info,a_department,a_company,a_employeeType,a_name,a_manager,a_country,a_city,a_mail,a_mobile,a_photo) )
         db.commit()
 
 db.close()
