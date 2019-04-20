@@ -21,7 +21,8 @@ parser = LDIFParser(open(sys.argv[1], 'rb'))
 for dn, entry in parser.parse():
     for k, v in entry.items():
         if k == 'jpegPhoto' or k =='thumbnailPhoto': 
-            file = open(entry['userPrincipalName'][0]+".jpg",'w') 
-            file.write(v[0]) 
+            print("img/" + entry['c'][0]+"."+entry['userPrincipalName'][0]+"."+date+".jpg")
+            file = open("img/" + entry['c'][0]+"."+entry['userPrincipalName'][0]+"."+date+".jpg",'wb') 
+            if (isinstance(v[0], (bytes, bytearray))):
+              file.write(v[0]) 
             file.close()
-            print(entry['userPrincipalName'][0])
