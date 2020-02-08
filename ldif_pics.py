@@ -4,7 +4,7 @@
 # notice and this notice are preserved.  This file is offered as-is,   
 # without any warranty.   
 #
-# This is a python script that extracts the pictured from an ldif file 
+# This is a python script that extracts the pictures from an ldif file 
 # it requires 1 parameter: the ldif file name
 
 import sys
