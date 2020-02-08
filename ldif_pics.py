@@ -1,4 +1,4 @@
-# Copyright (c) 2018 Jan van der Meiden.                            
+# Copyright (c) 2020 Jan van der Meiden.                            
 # Copying and distribution of this file, with or without modification, 
 # are permitted in any medium without royalty provided the copyright   
 # notice and this notice are preserved.  This file is offered as-is,   
@@ -8,22 +8,26 @@
 # it requires 2 parameters: the ldif file name and the date from the ldif file
 # (too lazy to extract this from something else)
 # It writes the images to a folder img
-#
-# Requires ldif3: 
-# > pip install ldif3
+
 import sys
-import collections
-from ldif3 import LDIFParser
+from ldif import LDIFParser,LDIFWriter
 
-parser = LDIFParser(open(sys.argv[1], 'rb'))
-date = sys.argv[2]
-for dn, entry in parser.parse():
-    for k, v in entry.items():
-        if k == 'jpegPhoto' or k =='thumbnailPhoto':
-            print(entry['userPrincipalName'][0])
-            print("img/" + entry['c'][0]+"."+entry['userPrincipalName'][0]+"."+date+".jpg")
-            file = open("img/" + entry['c'][0]+"."+entry['userPrincipalName'][0]+"."+date+".jpg",'wb')
-            if (isinstance(v[0], (bytes, bytearray))):
-              file.write(v[0])
-            file.close()
+def listToString(s):  
+    str1 = "" 
+    return (str1.join(str(s))) 
 
+class MyLDIF(LDIFParser):
+   def __init__(self,input,output):
+      LDIFParser.__init__(self,input)
+
+   def handle(self,dn,entry):
+      for k, v in entry.items():
+        if k == 'jpegPhoto' or k =='thumbnailPhoto': 
+           print(entry['userPrincipalName'][0].decode('utf-8'))
+           file = open(entry['c'][0].decode('utf-8')+"."+entry['userPrincipalName'][0].decode('utf-8')+".jpg",'wb') 
+           if (isinstance(v[0], (bytes, bytearray))):
+               file.write(v[0]) 
+           file.close()
+
+parser = MyLDIF(open(sys.argv[1], 'rb'), sys.stdout)
+parser.parse()
