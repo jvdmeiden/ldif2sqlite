@@ -5,16 +5,10 @@
 # without any warranty.   
 #
 # This is a python script that extracts the pictured from an ldif file 
-# it requires 2 parameters: the ldif file name and the date from the ldif file
-# (too lazy to extract this from something else)
-# It writes the images to a folder img
+# it requires 1 parameter: the ldif file name
 
 import sys
-from ldif import LDIFParser,LDIFWriter
-
-def listToString(s):  
-    str1 = "" 
-    return (str1.join(str(s))) 
+from ldif import LDIFParser,LDIFWriter 
 
 class MyLDIF(LDIFParser):
    def __init__(self,input,output):
