@@ -4,11 +4,14 @@
 # notice and this notice are preserved.  This file is offered as-is,   
 # without any warranty.   
 #
-# This is a python script that extracts the pictures from an ldif file 
-# it requires 1 parameter: the ldif file name
+# This is a python script that extracts the pictured from an ldif file 
+# it requires 2 parameters: the ldif file name and the date from the ldif file
+# (too lazy to extract this from something else)
+# It writes the images to a folder img
 
+import chardet
 import sys
-from ldif import LDIFParser,LDIFWriter 
+from ldif import LDIFParser,LDIFWriter
 
 class MyLDIF(LDIFParser):
    def __init__(self,input,output):
@@ -17,11 +20,18 @@ class MyLDIF(LDIFParser):
    def handle(self,dn,entry):
       for k, v in entry.items():
         if k == 'jpegPhoto' or k =='thumbnailPhoto': 
-           print(entry['userPrincipalName'][0].decode('utf-8'))
-           file = open(entry['c'][0].decode('utf-8')+"."+entry['userPrincipalName'][0].decode('utf-8')+".jpg",'wb') 
+           id=entry['mail'][0].decode('utf-8')
+           if id:
+              print(id)
+           else: 
+              id=entry['userPrincipalName'][0].decode('utf-8')
+              print(id) 
+           file = open(entry['c'][0].decode('utf-8')+"."+id+".jpg", mode='wb') 
            if (isinstance(v[0], (bytes, bytearray))):
                file.write(v[0]) 
            file.close()
 
-parser = MyLDIF(open(sys.argv[1], 'rb'), sys.stdout)
+with open(sys.argv[1], 'rb') as rawdata:
+        result = chardet.detect(rawdata.read())
+parser = MyLDIF(open(sys.argv[1], mode='r',  encoding=result['encoding']), sys.stdout)
 parser.parse()
